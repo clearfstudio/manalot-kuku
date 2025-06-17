@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>九九マスター</title>
+    <style>
+
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f0f8ff;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        background-image: url('back.png');
+        background-repeat: no-repeat;
+        background-position: right bottom;
+        background-attachment: fixed;
+        background-size: 500px auto;
+        background-color: #f0f8ff;
+      }
+
+      h2 {
+        font-size: 25px;
+        font-weight: bold;
+        color: #fff9c4;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      select {
+        touch-action: manipulation;
+        -webkit-user-select: none;
+        user-select: none;
+        text-align: center;
+        text-align-last: center; /* for option text alignment */
+      }
+
+      .game-wrapper {
+        width: 760px;
+        height: 550px;
+        margin: auto;
+        margin-top: 15px;
+        border: 5px solid #66ccff;
+        border-radius: 15px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .header {
+        background-color: #66ccff;
+        padding: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        color:  white;
+        border-bottom: 3px solid #66ccff;
+      }
+
+      .main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        padding: 10px;
+        overflow: hidden;
+      }
+
+      .footer {
+        background-color: #e6f7ff;
+        padding: 10px;
+        border-top: 3px solid #66ccff;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .footer-left,
+      .footer-right {
+        display: flex;
+      }
+
+      button {
+        font-size: 20px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 10px;
+        background-color: #4a90e2;
+        color: white;
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      button:hover {
+        background-color: #3a7ac9;
+      }
+
+      .user-select {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .user-select label {
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        text-align-last: center;
+      }
+
+.user-select select {
+  font-size: 18px;
+  padding: 8px 12px;
+  border: 2px solid #66ccff;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #333;
+  width: 150px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.user-select select:focus {
+  outline: none;
+  border-color: #3399cc;
+  box-shadow: 0 0 4px #66ccff;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* 半透明の背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px 20px;
+  border-radius: 15px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.modal-content p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.modal-content button {
+  font-size: 16px;
+  padding: 8px 16px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #3399cc;
+}
+
+.password-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  margin: 0 auto;
+}
+
+.pw-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.pw-display {
+  display: flex;
+  letter-spacing: 8px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  padding: 10px 10px;
+  padding-left: 20px;
+  border: 3px solid #4a90e2;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+  width: 150px;
+  height: 40px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  margin-right: 9px;
+}
+
+.pw-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  gap: 8px;
+  justify-content: center;
+  margin: 5px auto;
+}
+
+.pw-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background-color: #4a90e2;
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.pw-btn:hover {
+  background-color: #3a7ac9;
+}
+
+.action-btn {
+  font-size: 18px;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: #4a90e2;
+  color: white;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  background-color: #3a7ac9;
+}
+
+.action-btn2 {
+  font-size: 18px;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: #f6a828;
+  color: white;
+  cursor: pointer;
+}
+
+.action-btn2:hover {
+  background-color: #e59400;
+}
+
+.stage-btn {
+  font-size: 14px;
+  padding: 3px 5px;
+  width: 100px;
+  margin: 0px;
+  border: none;
+  border-radius: 8px;
+  background-color: #66ccff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.stage-btn:hover {
+  background-color: #3399cc;
+}
+
+.stage-btn2 {
+  font-size: 14px;
+  padding: 3px 5px;
+  width: 280px;
+  height: 60px;
+  margin: 0px;
+  border: none;
+  border-radius: 5px;
+  background-color: #66ccff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.stage-btn2:hover {
+  background-color: #3399cc;
+}
+
+.stage-label-btn {
+  font-size: 22px;
+  font-weight: bold;
+  color: black;
+  padding: 8px 12px;
+  width: 200px;
+  text-align: center;
+  border: 2px solid #66ccff;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.stage-label-btn:hover {
+  background-color: #e0f7ff;
+}
+
+.stage-label-btn.completed {
+  background-color: #e0ffe0;
+  border-color: #66cc66;
+}
+.stage-label-btn.completed:hover {
+  background-color: #ccffcc;
+}
+
+.mode-select-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mode-select-btn {
+  width: 190px;
+  height: 170px;
+  font-size: 25px;
+  font-weight: bold;
+  color: black;
+  padding: 8px;
+  border: 5px solid #66ccff;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.mode-select-btn:hover {
+  background-color: #e0f7ff;
+}
+
+.mode-select-btn.completed {
+  background-color: #e0ffe0;
+  border-color: #66cc66;
+}
+
+.mode-select-btn.completed:hover {
+  background-color: #ccffcc;
+}
+
+.key-btn {
+  font-size: 35px;
+  font-weight: bold;
+  width: 63px;
+  height: 63px;
+  padding: 7px;
+  border-radius: 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.key-btn:hover {
+  background-color: #3a7ac9;
+}
+
+#timerArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#backModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#backModalBox {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#backModalBox button {
+  font-size: 16px;
+  padding: 8px 16px;
+  margin: 0 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* 「はい」ボタン（オレンジ） */
+#backOkButton {
+  background-color: #ffa726;
+  color: white;
+}
+
+#backOkButton:hover {
+  background-color: #fb8c00;
+}
+
+/* 「いいえ」ボタン（グレー） */
+#backCancelButton {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+#backCancelButton:hover {
+  background-color: #bdbdbd;
+}
+
+.ok-key {
+  background-color: #f57c00;
+}
+
+.del-key {
+  background-color: #f48f8f;
+}
+
+.ok-key:hover {
+  background-color: #ef6c00;
+}
+
+.del-key:hover {
+  background-color: #e57373;
+}
+
+@keyframes explode {
+  to {
+    transform: translate(var(--x), var(--y)) rotate(720deg);
+  }
+}
+
+.confetti {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  opacity: 1;
+  z-index: 9999;
+}
+
+
+
+    </style>
+  </head>
+  <body>
+  <div class="game-wrapper">
+    <div class="header" id="headerArea"></div>
+    <div class="main" id="mainArea"></div>
+    <div class="footer" id="footerArea"></div>
+  </div>
+
+  <!-- モーダル本体 -->
+<div id="modalOverlay" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <p id="modalMessage">エラー</p>
+    <button id="modalOkButton" onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<div id="backModalOverlay" style="display: none;">
+  <div id="backModalBox">
+    <p id="backModalMessage">メニューにもどりますか？</p>
+    <div style="margin-top: 10px;">
+      <button id="backOkButton">はい</button>
+      <button id="backCancelButton">いいえ</button>
+    </div>
+  </div>
+</div>
+
+    <script>
+      //グローバル変数
+      let currentUser = null;
+      let enteredPassword = "";
+      let key = null;
+      let clearnumber = 3; //ステージクリアとなる回数　変更可
+      let allclearnumber = 5; //すべてのだんにちょうせんステージクリアとなる回数　変更可
+      let cleartime = 5; //クリア基準となる１問の秒数　変更可
+      let cleartimesec = cleartime * 1000; //クリア基準となる１問の秒数をミリに変換
+      let clearobject = null;
+      let currentStageNumber = null;
+      let currentStageMode = null;
+      let questionSet = []; // 問題セット
+      let currentQuestionIndex = 0;
+      let userAnswer = "";
+      let startTime = 0;
+      let correctArray = [];
+      let timeArray = [];
+      let timerAnimationId = null;
+      let timeokcount = 0;
+      let answerokcount = 0;
+      let allQuestions = []; // すべてのだん用の問題セット
+      let isReturningToMenu = false; // メニューにもどるボタンが押されたかどうかのフラグ
+      let isInputLocked = false; // 回答表示中の入力ロックフラグ
+
+      let smileimage = 'facesmile.png'
+      let nomalimage = 'facenomal.png'
+      let questionimage = 'facequestion.png'
+      let sadimage = 'facesad.png'
+      let nomalimage2 = 'facenomal2.png'
+
+// 問題の読み（「ににんが」など）
+const questionReadings = {
+  1: ["いんいちが", "いんにが", "いんさんが", "いんしが", "いんごが", "いんろくが", "いんしちが", "いんはちが", "いんくが"],
+  2: ["にいちが", "ににんが", "にさんが", "にしが", "にご", "にろく", "にしち", "にはち", "にく"],
+  3: ["さんいちが", "さんにが", "さざんが", "さんし", "さんご", "さぶろく", "さんしち", "さんぱ", "さんく"],
+  4: ["しいちが", "しにが", "しさん", "しし", "しご", "しろく", "ししち", "しは", "しく"],
+  5: ["ごいちが", "ごに", "ごさん", "ごし", "ごご", "ごろく", "ごしち", "ごは", "ごっく"],
+  6: ["ろくいちが", "ろくに", "ろくさん", "ろくし", "ろくご", "ろくろく", "ろくしち", "ろくは", "ろっく"],
+  7: ["しちいちが", "しちに", "しちさん", "しちし", "しちご", "しちろく", "しちしち", "しちは", "しちく"],
+  8: ["はちいちが", "はちに", "はちさん", "はちし", "はちご", "はちろく", "はちしち", "はっぱ", "はっく"],
+  9: ["くいちが", "くに", "くさん", "くし", "くご", "くろく", "くしち", "くは", "くく"]
+};
+
+// 答えの読み（「に」「し」など）
+const answerReadings = {
+  1: ["いち", "に", "さん", "し", "ご", "ろく", "しち", "はち", "く"],
+  2: ["に", "し", "ろく", "はち", "じゅう", "じゅうに", "じゅうし", "じゅうろく", "じゅうはち"],
+  3: ["さん", "ろく", "く", "じゅうに", "じゅうご", "じゅうはち", "にじゅういち", "にじゅうし", "にじゅうしち"],
+  4: ["し", "はち", "じゅうに", "じゅうろく", "にじゅう", "にじゅうし", "にじゅうはち", "さんじゅうに", "さんじゅうろく"],
+  5: ["ご", "じゅう", "じゅうご", "にじゅう", "にじゅうご", "さんじゅう", "さんじゅうご", "しじゅう", "しじゅうご"],
+  6: ["ろく", "じゅうに", "じゅうはち", "にじゅうし", "さんじゅう", "さんじゅうろく", "しじゅうに", "しじゅうはち", "ごじゅうし"],
+  7: ["しち", "じゅうし", "にじゅういち", "にじゅうはち", "さんじゅうご", "しじゅうに", "しじゅうく", "ごじゅうろく", "ろくじゅうさん"],
+  8: ["はち", "じゅうろく", "にじゅうし", "さんじゅうに", "しじゅう", "しじゅうはち", "ごじゅうろく", "ろくじゅうし", "しちじゅうに"],
+  9: ["く", "じゅうはち", "にじゅうしち", "さんじゅうろく", "しじゅうご", "ごじゅうし", "ろくじゅうさん", "しちじゅうに", "はちじゅういち"]
+};
+
+function showInitialScreen() {
+  currentStageNumber = null;
+  currentStageMode = null;
+  questionSet = []; // 問題セット
+  currentQuestionIndex = 0;
+  userAnswer = "";
+  startTime = 0;
+  correctArray = [];
+  timeArray = [];
+  timeokcount = 0;
+  answerokcount = 0;
+  isReturningToMenu = false;
+  // ヘッダー
+  document.getElementById("headerArea").innerHTML = `
+  <h2>めざせ九九マスター！</h2>
+  `;
+
+  // メイン
+  let col1 = "<div style='display: flex; flex-direction: column; gap: 15px;'>"; // 1〜5の段
+  let col2 = "<div style='display: flex; flex-direction: column; gap: 15px;'>"; // 6〜9の段＋すべて
+
+  for (let i = 1; i <= 9; i++) {
+    const buttonHtml = `
+      <button class="stage-label-btn" onclick="selectStageMode(${i})">
+        <span>${i}のだん</span>
+      </button>`;
+    if (i <= 5) col1 += buttonHtml;
+    else col2 += buttonHtml;
+  }
+
+  col1 += "</div>";
+  col2 += `
+    <div>
+      <button class="stage-label-btn" onclick="startAllStages()">
+        <span>すべてのだん</span>
+      </button>
+    </div>
+  </div>`;
+
+  document.getElementById("mainArea").innerHTML = `
+    <div style="display: flex; gap: 20px; width: 100%; max-width: 720px; margin: auto;">
+      <!-- 左：画像 -->
+      <div style="flex: none; width: 250px; display: flex; justify-content: center; align-items: center;">
+        <img src="neko3.png" style="width: 200px; height: auto;" alt="キャラクター">
+      </div>
+
+      <!-- 右：ステージ選択 -->
+      <div style="flex: 1; display: flex; align-items: center;">
+        <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+          <div style="display: flex; gap: 15px;">
+            ${col1}
+            ${col2}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // フッター
+  document.getElementById("footerArea").innerHTML = `
+    <div style="font-weight: bold; font-size: 20px;">
+      ちょうせんする　ステージを　えらんでね
+    </div>
+    <div style="font-size: 12px; color: #666666;">
+      まなろっとスタジオ　がくしゅうアプリ
+    </div>
+  `;
+}
+
+window.onload = function() {
+  showInitialScreen();
+};
+
+function showBackToMenuModal() {
+  const overlay = document.getElementById("backModalOverlay");
+  overlay.style.display = "flex";
+
+  document.getElementById("backOkButton").onclick = () => {
+    isReturningToMenu = true;
+    overlay.style.display = "none";
+    showInitialScreen(); // ← メニューに戻る処理
+  };
+
+  document.getElementById("backCancelButton").onclick = () => {
+    overlay.style.display = "none";
+  };
+}
+
+function selectStageMode(stageNumber) {
+  // メイン・フッターエリアをリセット
+  document.getElementById("mainArea").innerHTML = "";
+  document.getElementById("footerArea").innerHTML = "";
+
+  // フッターにもどるボタン
+  document.getElementById("footerArea").innerHTML = `
+    <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="footer-left" style="font-weight: bold; font-size: 20px; margin-left: 30px">
+        ${stageNumber}のだん　もんだいモードをえらんでね
+      </div>
+      <div class="footer-right">
+        <button class="action-btn" onclick="showBackToMenuModal()">もどる</button>
+      </div>
+    </div>
+  `;
+
+  // 各モード情報（表示だけ）
+  const modes = [
+    {
+      key: "のぼり",
+      label: "じゅんばん",
+      desc: "ちいさいかずから<br>おおきいかず"
+    },
+    {
+      key: "くだり",
+      label: "はんたい",
+      desc: "おおきいかずから<br>ちいさいかず"
+    },
+    {
+      key: "ランダム",
+      label: "ランダム",
+      desc: "ばらばらに<br>もんだいがでるよ"
+    }
+  ];
+
+  const buttonsHtml = `
+    <div class="mode-select-group">
+      ${modes.map(m => `
+        <button class="mode-select-btn" onclick="startStage(${stageNumber}, '${m.key}')">
+          <div style="font-weight: bold;">${m.label}</div>
+          <div style="font-size: 15px; margin-top: 6px; color: #666;">${m.desc}</div>
+        </button>
+      `).join("")}
+    </div>
+  `;
+
+  // メインエリアに挿入
+  document.getElementById("mainArea").innerHTML = `
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px;">
+      ${buttonsHtml}
+      <div style="width: 500px; margin-top: 0px; background: #fff0f5; padding: 16px; border-radius: 8px; box-shadow: 1px 1px 6px rgba(0,0,0,0.1); text-align: center;">
+        <div style="
+          position: relative; 
+          display: inline-block;
+          background-color: white;
+          color: #c84d7c;
+          font-weight: bold;
+          width: 400px;
+          font-size: 16px;
+          padding: 6px 12px;
+          border-radius: 20px;
+          margin-bottom: 10px;
+          box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        ">
+          <img src="facequestion.png" style="
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 80px;
+            height: auto;
+            z-index: 2;
+          ">
+          それぞれのモードをクリアするには…
+        </div><br>
+
+        <span style="font-weight: bold;">ぜんぶのもんだいに　せいかいする<br>
+        ひとつのもんだいを　${cleartime}びょういないに　せいかいする<br>
+        ぜんぶクリアできるように　がんばろう！
+      </div>
+    </div>
+  `;
+}
+
+function startStage(stageNumber, mode) {
+  currentStageNumber = stageNumber;
+  currentStageMode = mode;
+  questionSet = []; // 初期化
+
+  // フッター更新
+  const modeLabel = {
+    "のぼり": "ノーマルモード",
+    "くだり": "はんたいモード",
+    "ランダム": "ランダムモード"
+  }[mode] || "モード";
+
+  document.getElementById("footerArea").innerHTML = `
+    <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="footer-left" style="font-weight: bold; font-size: 20px; margin-left: 30px">
+        ${stageNumber}のだん　${modeLabel}にちょうせん！
+      </div>
+      <div class="footer-right">
+        <button class="action-btn" onclick="showBackToMenuModal()">もどる</button>
+      </div>
+    </div>
+  `;
+
+  // 問題作成
+  let factors = [];
+  if (mode === "のぼり") {
+    factors = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  } else if (mode === "くだり") {
+    factors = [9, 8, 7, 6, 5, 4, 3, 2, 1];
+  } else if (mode === "ランダム") {
+    factors = shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  }
+
+  questionSet = factors.map(f => ({
+    left: stageNumber,
+    right: f,
+    answer: stageNumber * f
+  }));
+
+  // メインエリア表示（準備メッセージ＋スタートボタン）
+  document.getElementById("mainArea").innerHTML = `
+    <div style="text-align: center; padding: 40px;">
+      <div style="font-size: 24px; margin-bottom: 20px;">もんだいがはじまるよ！じゅんびはいい？</div>
+      <button class="action-btn2" onclick="beginGame()">スタート！</button>
+    </div>
+  `;
+}
+
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function beginGame() {
+  currentQuestionIndex = 0;
+  correctArray = [];
+  timeArray = [];
+  userAnswer = "";
+  showQuestion(); // 最初の問題を表示
+}
+
+function showQuestion() {
+  const q = questionSet[currentQuestionIndex];
+
+  userAnswer = "";
+  startTime = Date.now();
+  const stage = currentStageNumber; // 1～9 の段
+const index = currentQuestionIndex;
+
+let problemReading = "";
+let answerReading = "";
+
+// 「のぼり」モードのときだけ読み方を取得
+if (currentStageMode === "のぼり" && questionReadings[stage] && answerReadings[stage]) {
+  problemReading = questionReadings[stage][index] || "";
+  answerReading = answerReadings[stage][index] || "";
+}
+
+const problemHTML = `
+  <div style="position: relative; font-size: 45px; display: flex; justify-content: center; align-items: flex-start; gap: 12px; margin-bottom: 10px;">
+
+    <!-- left -->
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <div style="background-color: #ffddee; border-radius: 10px; width: 90px; height: 70px;
+                  text-align: center; font-weight: bold; display: flex; justify-content: center; align-items: center;">
+        ${q.left}
+      </div>
+      <div style="font-size: 16px; color: #666;">&nbsp;</div>
+    </div>
+
+    <!-- × -->
+    <div style="font-size: 35px; font-weight: bold; margin-top: 20px;">×</div>
+
+    <!-- right -->
+    <div style="position: relative;">
+      <div style="background-color: #b8f8b8; border-radius: 10px; width: 90px; height: 70px;
+                  text-align: center; font-weight: bold; display: flex; justify-content: center; align-items: center;">
+        ${q.right}
+      </div>
+      <!-- 読みを right ボックスの真下に絶対配置（←親 box のサイズに影響しない） -->
+      <div style="
+        position: absolute;
+        top: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        color: #666;
+        font-weight: bold;
+        width: 20em;
+        letter-spacing: 1.5em;
+        text-align: center;
+        white-space: nowrap;
+      ">
+        ${problemReading}
+      </div>
+    </div>
+
+    <!-- ＝ -->
+    <div style="font-size: 35px; font-weight: bold; margin-top: 20px;">＝</div>
+
+<!-- answer -->
+<div style="position: relative;">
+  <div style="background-color: #eeeeee; border-radius: 10px; width: 90px; height: 70px;
+              font-size: 45px; font-weight: bold; display: flex; justify-content: center; align-items: center;">
+    <span id="answerDisplay">＿</span>
+  </div>
+  <!-- 答えの読みを absolute で浮かせて表示 -->
+  <div id="answerReading" style="
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    color: #e53935;
+    font-weight: bold;
+    width: 10em;
+    letter-spacing: 0.2em;
+    text-align: center;
+    white-space: nowrap;
+  ">
+  </div>
+</div>
+
+
+    <!-- showAnswer -->
+    <div id="showAnswer" style="
+      position: absolute;
+      right: -100px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: #e53935;
+      font-weight: bold;
+      width: 100px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;">
+    </div>
+  </div>
+`;
+
+
+  // テンキー
+const keypadHTML = `
+  <div style="display: grid; grid-template-columns: repeat(3, 65px); gap: 10px; justify-content: center; width: 300px;">
+    ${
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, "←", 0, "OK"].map(n => {
+        const className =
+          n === "OK" ? "key-btn ok-key" :
+          n === "←" ? "key-btn del-key" :
+          "key-btn";
+        return `<button class="${className}" onclick="handleKeyInput('${n}')">${n}</button>`;
+      }).join("")
+    }
+  </div>
+`;
+
+
+  // 下段3列：タイマー / テンキー / 判定
+  const bottomRowHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 30px;">
+<div id="timerArea" style="width: 150px; display: flex; flex-direction: column; align-items: center;">
+  <svg width="80" height="80">
+    <circle r="35" cx="40" cy="40" fill="none" stroke="#eee" stroke-width="8"/>
+    <circle id="progressCircle" r="35" cx="40" cy="40" fill="none" stroke="#66ccff" stroke-width="8"
+      stroke-dasharray="219.91" stroke-dashoffset="219.91" transform="rotate(-90 40 40)"/>
+  </svg>
+
+  <!-- 成績ボックス -->
+  <div style="margin-top: 10px; width: 90%;">
+    <div style="border: 2px solid #66ccff; border-radius: 6px; overflow: hidden; margin-top: 10px; margin-bottom: 6px;">
+      <div style="background: #66ccff; color: white; font-size: 16px; text-align: center; padding: 4px;">もんだいクリア</div>
+      <div id="answerClearCount" style="background: white; font-size: 22px; text-align: center; padding: 6px;"></div>
+    </div>
+    <div style="border: 2px solid #66ccff; border-radius: 6px; overflow: hidden;">
+      <div style="background: #66ccff; color: white; font-size: 16px; text-align: center; padding: 4px;">じかんクリア</div>
+      <div id="timeClearCount" style="background: white; font-size: 22px; text-align: center; padding: 6px;"></div>
+    </div>
+  </div>
+</div>
+
+
+      <div>${keypadHTML}</div>
+      <div id="judgeArea" style="position: relative; width: 150px; height: 200px;">
+        <div id="judgeResult" style="text-align: center;"></div>
+        <img id="judgeCharacter" src="${nomalimage}" style="
+          position: absolute;
+          bottom: -55px;
+          right: 22px;
+          width: 120px;
+          height: auto;
+          pointer-events: none;
+        ">
+      </div>
+
+    </div>
+  `;
+
+  // 全体レイアウト
+  document.getElementById("mainArea").innerHTML = `
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      ${problemHTML}
+      ${bottomRowHTML}
+    </div>
+  `;
+  document.getElementById("judgeResult").innerHTML = "";
+document.getElementById("judgeCharacter").src = nomalimage;
+  document.getElementById("answerClearCount").innerText = answerokcount;
+  document.getElementById("timeClearCount").innerText = timeokcount;
+  document.getElementById("showAnswer").innerText = "";
+
+startCircularTimer(cleartimesec); // ← ここ追加！
+
+}
+
+function handleKeyInput(key) {
+  if (isInputLocked) return;
+  if (key === "←") {
+    userAnswer = userAnswer.slice(0, -1);
+  } else if (key === "OK") {
+    checkAnswer();
+    return;
+  } else {
+    if (userAnswer.length < 2) userAnswer += key;
+  }
+  document.getElementById("answerDisplay").innerText = userAnswer || "＿";
+}
+
+function checkAnswer() {
+  isInputLocked = true;
+  const q = questionSet[currentQuestionIndex];
+  const correct = parseInt(userAnswer) === q.answer;
+  const elapsedTime = (Date.now() - startTime) / 1000;
+  const timeClear = elapsedTime <= cleartime && correct;
+  const isCorrect = userAnswer === String(q.left * q.right);
+  const stage = currentStageNumber;
+const index = currentQuestionIndex;
+const answerReading = (currentStageMode === "のぼり" && answerReadings[stage]?.[index]) ? answerReadings[stage][index] : "";
+
+
+// ○ or × シンボル
+const symbol = isCorrect ? "⭕" : "❌";
+const message = isCorrect ? "せいかい！" : "ざんねん…";
+
+  if (timerAnimationId !== null) {
+    cancelAnimationFrame(timerAnimationId);
+    timerAnimationId = null;
+  }
+  correctArray.push(correct);
+  timeArray.push(timeClear);
+
+document.getElementById("judgeResult").innerHTML = `
+  <div style="font-size: 75px;">${symbol}</div>
+  <div style="font-size: 22px; font-weight: bold;">${message}</div>
+`;
+document.getElementById("showAnswer").innerHTML = `
+  こたえ<br><div style="font-size: 35px;">${q.answer}</div>
+`;
+
+document.getElementById("answerReading").innerText = answerReading;
+
+document.getElementById("judgeCharacter").src = isCorrect ? smileimage : sadimage;
+// 判定処理のあとに加える
+if (correct) {
+  answerokcount++;
+  document.getElementById("answerClearCount").innerText = answerokcount;
+}
+
+if (timeClear) {
+  timeokcount++;
+  document.getElementById("timeClearCount").innerText = timeokcount;
+}
+
+  // 次の問題に進む
+  setTimeout(() => {
+    isInputLocked = false;
+    if (isReturningToMenu) return;
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questionSet.length) {
+      showQuestion();
+    } else {
+      // currentStageMode によって分岐
+      if (currentStageMode === "ランダム全") {
+        // すべてのだん用
+        showAllStagesResult();
+      } else {
+        // 各段モード用
+        showResult();
+      }
+    }
+  }, 1500);
+
+}
+
+function startCircularTimer(duration = cleartimesec) {
+  const circle = document.getElementById("progressCircle");
+  const radius = 35;
+  const circumference = 2 * Math.PI * radius;
+
+  const start = Date.now();
+
+  function animate() {
+    const now = Date.now();
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const offset = circumference * (1 - progress);
+    circle.setAttribute("stroke-dashoffset", offset);
+
+    if (progress < 1) {
+      timerAnimationId = requestAnimationFrame(animate);
+    }
+  }
+
+  // 初期設定（ダッシュ線を円周に）
+  circle.setAttribute("stroke-dasharray", circumference);
+  circle.setAttribute("stroke-dashoffset", circumference); // ＝空の状態
+  timerAnimationId = requestAnimationFrame(animate);
+}
+
+function showResult() {
+  let modeLabel = "";
+if (currentStageMode === "のぼり") {
+  modeLabel = "じゅんばん";
+} else if (currentStageMode === "くだり") {
+  modeLabel = "はんたい";
+} else if (currentStageMode === "ランダム") {
+  modeLabel = "ランダム";
+}
+
+  document.getElementById("mainArea").innerHTML = "";
+  document.getElementById("footerArea").innerHTML = `
+    <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="footer-left" style="font-weight: bold; font-size: 20px; margin-left: 30px">
+        ${currentStageNumber}のだん　${modeLabel}モード　せいせきはっぴょう
+      </div>
+      <div class="footer-right">
+      <button class="action-btn" onclick="showBackToMenuModal()">もどる</button>
+      </div>
+    </div>
+  `;
+
+  const main = document.getElementById("mainArea");
+  main.style.display = "flex";
+  main.style.flexDirection = "column";
+  main.style.alignItems = "center";
+  main.style.gap = "20px";
+
+  const resultsRow = document.createElement("div");
+  resultsRow.style.display = "flex";
+  resultsRow.style.gap = "15px";
+
+  // 問題クリア数ボックス
+  const answerBox = document.createElement("div");
+  answerBox.style.border = "2px solid #66ccff";
+  answerBox.style.borderRadius = "10px";
+  answerBox.style.padding = "10px";
+  answerBox.style.textAlign = "center";
+  answerBox.innerHTML = `<div style="font-size: 16px; margin-bottom: 5px;">もんだいクリアすう</div><div id="answerResult" style="font-size: 100px; font-weight: bold; color: #2196F3;">0</div>`;
+  answerBox.style.width = "150px";
+  answerBox.style.height = "150px";
+answerBox.style.display = "flex";
+answerBox.style.flexDirection = "column";
+answerBox.style.alignItems = "center";
+answerBox.style.justifyContent = "center";
+answerBox.style.position = "relative";
+const answerStamp = document.createElement("span");
+answerStamp.innerText = "💮";
+answerStamp.style.position = "absolute";
+answerStamp.style.bottom = "-20px";
+answerStamp.style.right = "-20px";
+answerStamp.style.fontSize = "80px";
+answerStamp.style.display = "none"; // 最初は非表示
+answerBox.appendChild(answerStamp);
+
+
+  resultsRow.appendChild(answerBox);
+
+  // 時間クリア数ボックス
+  const timeBox = document.createElement("div");
+  timeBox.style.border = "2px solid #66ccff";
+  timeBox.style.borderRadius = "10px";
+  timeBox.style.padding = "10px";
+  timeBox.style.textAlign = "center";
+  timeBox.style.width = "150px";
+  timeBox.style.height = "150px";
+  timeBox.style.display = "flex";
+timeBox.style.flexDirection = "column";
+timeBox.style.alignItems = "center";
+timeBox.style.justifyContent = "center";
+timeBox.style.position = "relative";
+  timeBox.innerHTML = `<div style="font-size: 16px; margin-bottom: 5px;">じかんクリアすう</div><div id="timeResult" style="font-size: 100px; font-weight: bold; color: #4CAF50;">0</div>`;
+const timeStamp = document.createElement("span");
+timeStamp.innerText = "💮";
+timeStamp.style.position = "absolute";
+timeStamp.style.bottom = "-20px";
+timeStamp.style.right = "-20px";
+timeStamp.style.fontSize = "80px";
+timeStamp.style.display = "none";
+timeBox.appendChild(timeStamp);
+
+  resultsRow.appendChild(timeBox);
+
+  main.appendChild(resultsRow);
+
+  let answerCurrent = 0;
+  const answerTarget = answerokcount;
+  const answerTimer = setInterval(() => {
+    if (answerCurrent < answerTarget) {
+      answerCurrent++;
+      document.getElementById("answerResult").innerText = answerCurrent;
+    } else {
+      clearInterval(answerTimer);
+      if (answerTarget === 9) {
+        answerStamp.style.display = "inline";
+      }
+
+      let timeCurrent = 0;
+      const timeTarget = timeokcount;
+      const timeTimer = setInterval(() => {
+        if (timeCurrent < timeTarget) {
+          timeCurrent++;
+          document.getElementById("timeResult").innerText = timeCurrent;
+        } else {
+          clearInterval(timeTimer);
+          if (timeTarget === 9) {
+            timeStamp.style.display = "inline";
+          }
+
+          // 最終結果表示ボックス
+          const finalBox = document.createElement("div");
+          finalBox.style.padding = "10px";
+          finalBox.style.borderRadius = "12px";
+          finalBox.style.textAlign = "center";
+          finalBox.style.fontSize = "18px";
+          finalBox.style.fontWeight = "bold";
+          finalBox.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
+          finalBox.style.animation = "pop 0.5s ease";
+          finalBox.style.width = "150px";
+          finalBox.style.height = "150px";
+          finalBox.style.display = "flex";
+finalBox.style.flexDirection = "column";
+finalBox.style.alignItems = "center";
+finalBox.style.justifyContent = "center";
+finalBox.style.position = "relative";
+const finalStamp = document.createElement("span");
+finalStamp.innerText = "💯";
+finalStamp.style.position = "absolute";
+finalStamp.style.bottom = "-40px";
+finalStamp.style.right = "-40px";
+finalStamp.style.fontSize = "80px";
+finalStamp.style.display = "none";
+
+          resultsRow.appendChild(finalBox);
+          const resultmessage = document.createElement("div");
+          resultmessage.id = "resultMessage";
+          resultmessage.style.marginTop = "10px";
+          resultmessage.style.fontSize = "20px";
+          resultmessage.style.color = "black";
+          
+          let message = "";
+          let img = "";
+          if (answerokcount === 9 && timeokcount === 9) {
+            message = "クリア！";
+            img = smileimage;
+            finalBox.style.backgroundColor = "#ffeef3";
+            resultmessage.innerText = `${currentStageNumber}のだん　${modeLabel}モード　クリアおめでとう！`;
+
+            showModal(`${currentStageNumber}のだん<br>ステージクリアおめでとう！🎉`, true);
+            launchConfetti(40);
+          } else if (answerokcount === 9) {
+            message = "おしい！";
+            img = nomalimage2;
+            finalBox.style.backgroundColor = "#f5f0ff";
+            resultmessage.innerText = "ぜんもんクリアおめでとう！つぎは　はやくこたえられるようになろう！";
+          } else {
+            message = "ざんねん…";
+            img = sadimage;
+            finalBox.style.backgroundColor = "#e6f7ff";
+            resultmessage.innerText = "まずは　まちがえないで　ぜんもんクリアをめざそう！";
+          }
+
+          finalBox.innerHTML = `
+            <div style="margin-bottom: 10px;">${message}</div>
+            <img src="${img}" style="width: 100px; height: auto;">
+          `;
+          finalBox.appendChild(finalStamp);
+          if (answerokcount === 9 && timeokcount === 9) {
+            finalStamp.style.display = "inline";
+          }
+          main.appendChild(resultmessage);
+
+
+
+          }
+        }, 80);
+      }
+    }, 80);
+  }
+
+function launchConfetti(count = 30) {
+  for (let i = 0; i < count; i++) {
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+    document.body.appendChild(confetti);
+
+    // 画面中央に固定配置
+    confetti.style.left = "50%";
+    confetti.style.top = "50%";
+
+    // ランダムな色・サイズ
+    confetti.style.backgroundColor = randomColor();
+    confetti.style.width = Math.random() * 8 + 4 + "px";
+    confetti.style.height = confetti.style.width;
+    const angle = Math.random() * 2 * Math.PI;
+    const radius = 300 + Math.random() * 100;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+
+
+    confetti.style.animation = `explode 1s ease-out forwards`;
+    confetti.style.setProperty('--x', `${x}px`);
+    confetti.style.setProperty('--y', `${y}px`);
+
+    setTimeout(() => confetti.remove(), 1000);
+  }
+}
+
+function randomColor() {
+  const colors = ["#FF69B4", "#FFD700", "#87CEFA", "#98FB98", "#FFA07A"];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function showModal(message, showOkButton = true, onOk = null) {
+  document.getElementById("modalMessage").innerHTML = message;
+  document.getElementById("modalOverlay").style.display = "flex";
+
+  const okButton = document.getElementById("modalOkButton");
+  okButton.style.display = showOkButton ? "inline-block" : "none";
+
+  // OKボタンに以前のイベントが残らないようにまずリセット
+  okButton.onclick = null;
+
+  if (showOkButton && onOk) {
+    okButton.onclick = () => {
+      closeModal();
+      onOk(); // ← OKが押されたら実行
+    };
+  } else if (showOkButton) {
+    okButton.onclick = () => {
+      closeModal();
+    };
+  }
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").style.display = "none";
+}
+
+function startAllStages() {
+  // ① メイン・フッターエリアのリフレッシュ
+  document.getElementById("mainArea").innerHTML = "";
+  document.getElementById("footerArea").innerHTML = `
+    <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="footer-left" style="font-weight: bold; font-size: 20px; margin-left: 30px">
+        すべてのだん　に　ちょうせん！
+      </div>
+      <div class="footer-right">
+        <button class="action-btn" onclick="showBackToMenuModal()">もどる</button>
+      </div>
+    </div>
+  `;
+
+  // ② 問題作成：かけられる数、かける数をランダムに10個ずつ生成
+  allQuestions = Array.from({ length: 10 }, () => {
+    const left = Math.floor(Math.random() * 9) + 1;
+    const right = Math.floor(Math.random() * 9) + 1;
+    return { left, right, answer: left * right };
+  });
+
+  // ④ メインエリア：モード表示
+document.getElementById("mainArea").innerHTML = `
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px;">
+    <div class="mode-select-group">
+      <button class="mode-select-btn" onclick="startAllStageGame()" style="width: 350px; height: 150px;">
+        <div style="font-weight: bold;">すべてのだん　ランダム</div>
+        <div style="font-size: 15px; margin-top: 6px; color: #666;">いろんなだんから　１０もん　でてくるよ！</div>
+      </button>
+    </div>
+
+    <div style="width: 500px; background: #fff0f5; padding: 16px; border-radius: 8px; box-shadow: 1px 1px 6px rgba(0,0,0,0.1); text-align: center;">
+      <div style="
+        position: relative; 
+        display: inline-block;
+        background-color: white;
+        color: #c84d7c;
+        font-weight: bold;
+        width: 400px;
+        font-size: 16px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        margin-bottom: 10px;
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      ">
+        <img src="${nomalimage2}" style="
+          position: absolute;
+          top: -30px;
+          left: -25px;
+          width: 80px;
+          height: auto;
+          z-index: 2;
+        ">
+        すべてのだんステージをクリアするには…
+      </div><br>
+      すべてのだんのもんだいが　ランダムに１０もんでます<br>
+      <span style="font-weight: bold;">
+        ぜんぶのもんだいに　せいかいしよう<br>
+        ひとつのもんだいを　${cleartime}びょういないに　せいかいしよう
+      </span>
+    </div>
+  </div>
+`;
+
+}
+
+function startAllStageGame() {
+  // ステージ番号とモードラベル（固定）
+  const stageNumber = "すべてのだん";
+  const modeLabel = "ランダムモード";
+  currentStageMode = "ランダム全"
+
+  // メインエリア：準備画面を表示
+  document.getElementById("mainArea").innerHTML = `
+    <div style="text-align:center; padding:40px;">
+      <div style="font-size:24px; margin-bottom:20px;">
+        もんだいがはじまるよ！じゅんびはいい？
+      </div>
+      <button class="action-btn2" onclick="beginAllStagesGame()">スタート！</button>
+    </div>
+  `;
+
+  // フッターエリア：タイトルと戻るボタン
+  document.getElementById("footerArea").innerHTML = `
+    <div class="footer-content" style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="footer-left" style="font-weight:bold;font-size:20px;margin-left:30px">
+        ${stageNumber}　${modeLabel}にちょうせん！
+      </div>
+      <div class="footer-right">
+        <button class="action-btn" onclick="showBackToMenuModal()">もどる</button>
+      </div>
+    </div>
+  `;
+}
+
+function beginAllStagesGame() {
+  // 問題列を流用するため questionSet にセット
+  questionSet = allQuestions;
+  // あとは通常の beginGame を呼ぶだけ
+  beginGame();
+}
+
+function showAllStagesResult() {
+  const stageLabel = "すべてのだん";
+  const modeLabel = "ランダム";
+
+  // ヘッダー更新
+  document.getElementById("mainArea").innerHTML = "";
+  document.getElementById("footerArea").innerHTML = `
+    <div class="footer-content" style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="footer-left" style="font-weight:bold;font-size:20px;margin-left:30px">
+        ${stageLabel}　${modeLabel}モード　せいせきはっぴょう
+      </div>
+      <div class="footer-right"></div>
+      <button class="action-btn" onclick="showBackToMenuModal()">もどる</button>
+    </div>
+  `;
+
+  // メインコンテナ
+  const main = document.getElementById("mainArea");
+  main.style.display = "flex";
+  main.style.flexDirection = "column";
+  main.style.alignItems = "center";
+  main.style.gap = "20px";
+
+  // ボックス行
+  const resultsRow = document.createElement("div");
+  resultsRow.style.display = "flex";
+  resultsRow.style.gap = "15px";
+
+  // 問題クリア数ボックス
+  const answerBox = document.createElement("div");
+  Object.assign(answerBox.style, {
+    border: "2px solid #66ccff",
+    borderRadius: "10px",
+    padding: "10px",
+    textAlign: "center",
+    width: "150px",
+    height: "150px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative"
+  });
+  answerBox.innerHTML = `
+    <div style="font-size:16px;margin-bottom:5px;">もんだいクリアすう</div>
+    <div id="answerResult" style="font-size:100px;font-weight:bold;color:#2196F3;">0</div>
+  `;
+  const answerStamp = document.createElement("span");
+  Object.assign(answerStamp.style, {
+    position: "absolute",
+    bottom: "-20px",
+    right: "-20px",
+    fontSize: "80px",
+    display: "none"
+  });
+  answerStamp.innerText = "💮";
+  answerBox.appendChild(answerStamp);
+  resultsRow.appendChild(answerBox);
+
+  // 時間クリア数ボックス
+  const timeBox = document.createElement("div");
+  Object.assign(timeBox.style, {
+    border: "2px solid #66ccff",
+    borderRadius: "10px",
+    padding: "10px",
+    textAlign: "center",
+    width: "150px",
+    height: "150px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative"
+  });
+  timeBox.innerHTML = `
+    <div style="font-size:16px;margin-bottom:5px;">じかんクリアすう</div>
+    <div id="timeResult" style="font-size:100px;font-weight:bold;color:#4CAF50;">0</div>
+  `;
+  const timeStamp = document.createElement("span");
+  Object.assign(timeStamp.style, {
+    position: "absolute",
+    bottom: "-20px",
+    right: "-20px",
+    fontSize: "80px",
+    display: "none"
+  });
+  timeStamp.innerText = "💮";
+  timeBox.appendChild(timeStamp);
+  resultsRow.appendChild(timeBox);
+
+  main.appendChild(resultsRow);
+
+  // アニメーションカウント
+  let ansCur = 0;
+  const ansTar = answerokcount; // 0～10
+  const ansTimer = setInterval(() => {
+    if (ansCur < ansTar) {
+      ansCur++;
+      document.getElementById("answerResult").innerText = ansCur;
+    } else {
+      clearInterval(ansTimer);
+      if (ansTar === 10) answerStamp.style.display = "inline";
+
+      let timeCur = 0;
+      const timeTar = timeokcount;
+      const timeTimer = setInterval(() => {
+        if (timeCur < timeTar) {
+          timeCur++;
+          document.getElementById("timeResult").innerText = timeCur;
+        } else {
+          clearInterval(timeTimer);
+          if (timeTar === 10) timeStamp.style.display = "inline";
+
+          // 最終結果表示ボックス
+          const finalBox = document.createElement("div");
+          finalBox.style.padding = "10px";
+          finalBox.style.borderRadius = "12px";
+          finalBox.style.textAlign = "center";
+          finalBox.style.fontSize = "18px";
+          finalBox.style.fontWeight = "bold";
+          finalBox.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
+          finalBox.style.animation = "pop 0.5s ease";
+          finalBox.style.width = "150px";
+          finalBox.style.height = "150px";
+          finalBox.style.display = "flex";
+          finalBox.style.flexDirection = "column";
+          finalBox.style.alignItems = "center";
+          finalBox.style.justifyContent = "center";
+          finalBox.style.position = "relative";
+          const finalStamp = document.createElement("span");
+          finalStamp.innerText = "💯";
+          finalStamp.style.position = "absolute";
+          finalStamp.style.bottom = "-40px";
+          finalStamp.style.right = "-40px";
+          finalStamp.style.fontSize = "80px";
+          finalStamp.style.display = "none";
+
+          resultsRow.appendChild(finalBox);
+          const resultmessage = document.createElement("div");
+          resultmessage.id = "resultMessage";
+          resultmessage.style.marginTop = "10px";
+          resultmessage.style.fontSize = "20px";
+          resultmessage.style.color = "black";
+          
+          let message = "";
+          let img = "";
+          if (ansTar === 10 && timeTar === 10) {
+            message = "クリア！";
+            img = smileimage;
+            finalBox.style.backgroundColor = "#ffeef3";
+            resultmessage.innerText = `すべてのだん　${modeLabel}モード　クリアおめでとう！`;
+
+            showModal(`すべてのだん<br>ステージクリアおめでとう！🎉`, true);
+            launchConfetti(40);
+          } else if (ansTar === 10) {
+            message = "おしい！";
+            img = nomalimage2;
+            finalBox.style.backgroundColor = "#f5f0ff";
+            resultmessage.innerText = "ぜんもんクリアおめでとう！つぎは　はやくこたえられるようになろう！";
+          } else {
+            message = "ざんねん…";
+            img = sadimage;
+            finalBox.style.backgroundColor = "#e6f7ff";
+            resultmessage.innerText = "まずは　まちがえないで　ぜんもんクリアをめざそう！";
+          }
+
+          finalBox.innerHTML = `
+            <div style="margin-bottom: 10px;">${message}</div>
+            <img src="${img}" style="width: 100px; height: auto;">
+          `;
+          finalBox.appendChild(finalStamp);
+          if (ansTar === 10 && timeTar === 10) {
+            finalStamp.style.display = "inline";
+          }
+          main.appendChild(resultmessage);
+
+
+        }
+      }, 80);
+    }
+  }, 80);
+}
+
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes explode {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+`;
+document.head.appendChild(style);
+
+</script>
+</body>
+</html>

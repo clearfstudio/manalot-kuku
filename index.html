@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>九九マスター</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    window.onload = function () {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const ratio = w / h;
+
+      // 比率でスマホかタブレット・PCかを判定
+      if (ratio < 0.75) {
+        // 縦長 → スマホ用ページへ
+        window.location.href = "mobile.html";
+      } else {
+        // 横長 → 通常のタブレット/PC用ページへ
+        window.location.href = "main.html";
+      }
+    };
+  </script>
+</head>
+<body>
+  <p style="text-align: center; padding: 50px;">画面を読み込んでいます...</p>
+</body>
+</html>
