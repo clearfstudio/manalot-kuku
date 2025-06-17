@@ -378,8 +378,8 @@ body, html {
 .key-btn {
   font-size: 36px;
   font-weight: bold;
-  width: 67px;
-  height:67px;
+  width: 68px;
+  height:68px;
   padding: 7px;
   border-radius: 10px;
   background-color: #4a90e2;
@@ -484,12 +484,14 @@ body, html {
 }
 
 .empty-key {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  width: 20px;
-  pointer-events: none;  /* ← クリック無効 */
+  pointer-events: none;        /* 押せないようにする */
+  background: transparent;     /* 背景を消す */
+  border: none;                /* 枠も消す */
+  min-width: 10px;             /* 必要なら最小サイズを指定 */
+  height: 1px;                 /* 高さをほぼゼロにすることで見た目スリムに */
+  padding: 0;
 }
+
 
 .empty-key:hover,
 .empty-key:active,
@@ -927,7 +929,7 @@ const problemHTML = `
 const keypadHTML = `
   <div style="
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.3fr 1fr;
     gap: 13px;
     justify-content: center;
     margin: auto;
@@ -950,7 +952,6 @@ const keypadHTML = `
     }
   </div>
 `;
-
 
   // 下段3列：タイマー / テンキー / 判定
   const bottomRowHTML = `
